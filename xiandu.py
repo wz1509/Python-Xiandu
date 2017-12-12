@@ -11,10 +11,10 @@ class Xiandu:
     def __init__(self):
         self.siteGankURL = 'http://gank.io'
         self.siteURL = 'http://gank.io/xiandu'
-        self.conn = mysql.connector.connect(user='wz', password='123456', database='Gank', use_unicode=True)
+        self.conn = mysql.connector.connect(user='wz', password='123456', database='test', use_unicode=True)
 
     def getCookie(self):
-        filename = '../cook.txt'
+        filename = 'cook.txt'
         cookie = cookielib.MozillaCookieJar()
         cookie.load(filename, ignore_discard=True, ignore_expires=True)
         return cookie
@@ -79,13 +79,13 @@ class Xiandu:
         print '插入数据成功'
 
     # 获取闲读内容
-    def getXianduContent(self, cat, indexPage):
+    def getXianduContent(self, cat, page):
         cursor = self.conn.cursor()
         sql = 'delete from table_content'
         cursor.execute(sql)
         self.conn.commit()
 
-        soup = self.getBeautifulSoup(self.siteGankURL + cat + '/page/' + str(indexPage))
+        soup = self.getBeautifulSoup(self.siteGankURL + cat + '/page/' + str(page))
         # print soup.prettify()
         items = soup.find_all('div', class_='xiandu_item')
         for i in range(len(items)):
@@ -112,7 +112,7 @@ xd.createCat()
 xd.getXianduCatList()
 
 xd.createContent()
-xd.getXianduContent('/xiandu/wow', 1)
+xd.getXianduContent('/xiandu/wow', 2)
 
 sql = 'select * from table_content'
 for item in xd.selectTable(sql):
